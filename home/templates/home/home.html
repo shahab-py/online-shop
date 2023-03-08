@@ -9,8 +9,8 @@
 
 {% block content %}
     {% for product in products %}
-    <div class="card" style="width: 18rem;">
-        <img src="{{ product.image.url }}" class="card-img-top">
+    <div class="card" style="width: 18rem; display: inline-block;">
+        <img src="{{ product.image.url }}" class="card-img-top" width="200px">
         <div class="card-body">
             <a href="{{ product.get_absolute_url }}"><h5 class="card-title">{{ product.name }}</h5></a>
         </div>
