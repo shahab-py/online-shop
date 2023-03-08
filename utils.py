@@ -1,5 +1,6 @@
-from django.contrib.auth.mixins import UserPassesTestMixin
 from kavenegar import *
+from django.contrib.auth.mixins import UserPassesTestMixin
+
 
 
 def send_otp_code(phone_number, code):

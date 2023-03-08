@@ -23,16 +23,16 @@ class UserRegisterView(View):
         if form.is_valid():
             random_code = random.randint(1000, 9999)
             send_otp_code(form.cleaned_data['phone'], random_code)
-            OtpCode.objects.create(phone_number=form.cleaned_data['phone'], code = random_code)
+            OtpCode.objects.create(phone_number=form.cleaned_data['phone'], code=random_code)
             request.session['user_registration_info']={
                 'phone_number': form.cleaned_data['phone'],
                 'email': form.cleaned_data['email'],
                 'full_name': form.cleaned_data['full_name'],
-                'password': form.cleaned_data['password']
+                'password': form.cleaned_data['password'],
             }
             messages.success(request, 'we sent you a code', 'success')
             return redirect('accounts:verify_code')
-        return redirect('home:home')
+        return render(request, self.template_name, {'form': form})
 
 
 class UserRegisterVerifyCodeView(View):
@@ -64,7 +64,8 @@ class UserRegisterVerifyCodeView(View):
             else:
                 messages.error(request, 'This code is wrong .', 'danger')
                 return redirect('accounts:verify_code')
-        return redirect('home:home')
+        return render(request, self.template_name, {'form': form})
+        
     
 
 class UserLogoutView(LoginRequiredMixin, View):
@@ -86,7 +87,7 @@ class UserLoginView(View):
         form = self.form_class(request.POST)
         if form.is_valid():
             cd = form.cleaned_data
-            user = authenticate(request, phone_number=cd['phone'], password=cd['password'])
+            user = authenticate(request, phone_number=cd['phone_number'], password=cd['password'])
             if user is not None:
                 login(request, user)
                 messages.success(request, 'you logged in successfully', 'info')

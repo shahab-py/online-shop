@@ -1,6 +1,6 @@
 
 from django import forms
-from .models import User
+from .models import User, OtpCode
 from django.core.exceptions import ValidationError
 from django.contrib.auth.forms import ReadOnlyPasswordHashField
 
@@ -57,8 +57,9 @@ class UserRegistrationForm(forms.Form):
         phone = self.cleaned_data['phone']
         user = User.objects.filter(phone_number = phone).exists()
 
-        if phone:
+        if user:
             raise ValidationError('Enter validation phone')
+        OtpCode.objects.filter(phone_number = phone).delete()
         return phone
 
 
