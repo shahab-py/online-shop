@@ -28,5 +28,15 @@ class UserAdmin(BaseUserAdmin):
     search_field = ('email', 'full_name'),
     ordering = ('full_name'),
     filter_horizontal = ('groups', 'user_permissions')
+    readonly_fields = ('last_login',)
+
+
+    def get_form(self, request, obj=None, **kwargs):
+        form = super().get_form(request, obj, **kwargs)
+        is_superuser = request.user.is_superuser
+
+        if not is_superuser:
+            form.base_field=['is_superuser'] .disable=True
+        return form
 
 admin.site.register(User, UserAdmin)
